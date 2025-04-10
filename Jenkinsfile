@@ -13,7 +13,7 @@ pipeline {
         stage('Build docker image'){
             steps{
                 script{
-                    sh 'docker build -t kyawtkshwesin/devop-automation .'
+                    sh 'docker build -t kyawtkshwesin/devop-automation:v1.0 .'
                 }
             }
         }
@@ -23,7 +23,7 @@ pipeline {
                     withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
                     sh 'docker login -u kyawtkshwesin -p ${dockerhubpwd}'
                     }
-                    sh 'docker push kyawtkshwesin/devop-automation:v1'
+                    sh 'docker push kyawtkshwesin/devop-automation:v1.0'
                 }
             }
         }
