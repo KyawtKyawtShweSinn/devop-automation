@@ -36,7 +36,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>devOp-integration</finalName>
+		<finalName>devop-automation</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

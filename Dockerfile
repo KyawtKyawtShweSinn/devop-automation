@@ -1,4 +1,4 @@
 FROM openjdk:21
 EXPOSE 8080
-ADD target/devOp-integration.jar devOp-integration.jar
-ENTRYPOINT ["java", "-jar", "devOp-integration.jar"]
+ADD target/devop-automation.jar devop-automation.jar
+ENTRYPOINT ["java", "-jar", "devop-automation.jar"]
