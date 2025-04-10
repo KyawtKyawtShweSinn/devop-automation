@@ -23,7 +23,7 @@ pipeline {
                     withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
                     sh 'docker login -u kyawtkshwesin -p ${dockerhubpwd}'
                     }
-                    sh 'docker push kyawtkshwesin/devop-automation'
+                    sh 'docker push kyawtkshwesin/devop-automation:v1'
                 }
             }
         }
