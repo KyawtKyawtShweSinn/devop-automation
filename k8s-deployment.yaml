@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devop-automation
+spec:
+  selector:
+    matchLabels:
+      app: devop-automation
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: devop-automation
+    spec:
+      containers:
+        - name: devop-automation
+          image: kyawtkshwesin/devop-automation:REPLACE_TAG
+          ports:
+            - containerPort: 8000
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 30
+            timeoutSeconds: 1
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            timeoutSeconds: 1

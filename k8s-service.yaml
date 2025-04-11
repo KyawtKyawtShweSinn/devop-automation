@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: devop-automation
+  labels:
+    app: devop-automation
+spec:
+  type: NodePort
+  selector:
+    app: devop-automation
+  ports:
+    - protocol: TCP
+      port: 8000
+      name: http
+      targetPort: 8000
+      nodePort: 30080  # optional: specify port, or leave for auto assignment
