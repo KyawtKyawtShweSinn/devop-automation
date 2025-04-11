@@ -17,15 +17,3 @@ spec:
           image: kyawtkshwesin/devop-automation:REPLACE_TAG
           ports:
             - containerPort: 8000
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8000
-            initialDelaySeconds: 30
-            timeoutSeconds: 1
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: 8000
-            initialDelaySeconds: 10
-            timeoutSeconds: 1
