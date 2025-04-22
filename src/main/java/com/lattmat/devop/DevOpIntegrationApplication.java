@@ -1,13 +1,20 @@
 package com.lattmat.devop;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.WebApplicationInitializer;
 
 @SpringBootApplication
-public class DevOpIntegrationApplication {
-
+public class DevOpIntegrationApplication extends SpringBootServletInitializer implements WebApplicationInitializer {
 	public static void main(String[] args) {
 		SpringApplication.run(DevOpIntegrationApplication.class, args);
 	}
 
+	@Bean
+	public ModelMapper mapper() {
+		return new ModelMapper();
+	}
 }
