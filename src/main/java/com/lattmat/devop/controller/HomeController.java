@@ -9,4 +9,9 @@ public class HomeController {
     public String welcomePage() {
         return "Welcome CI/CD project";
     }
+
+    @GetMapping("/admin/home")
+    public String welcomeAdminPage() {
+        return "Welcome Admin API";
+    }
 }

@@ -52,6 +52,16 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(@RequestBody UserDto userDto) {
+        try {
+            authenticationService.registerUser(userDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User registration failed.");
+        }
+    }
+
     @PostMapping("/refresh")
     public ResponseEntity<Object> refreshToken(@RequestBody String expiredToken) {
         try {
