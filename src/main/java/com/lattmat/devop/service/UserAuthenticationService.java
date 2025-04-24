@@ -2,8 +2,8 @@ package com.lattmat.devop.service;
 
 import com.lattmat.devop.dto.UserDto;
 import com.lattmat.devop.entity.Users;
-import com.lattmat.devop.mapper.UserMapper;
 import com.lattmat.devop.repository.UserRepository;
+import com.lattmat.devop.utility.GenricMapperUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,12 +17,12 @@ import java.util.ArrayList;
 public class UserAuthenticationService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
+    private final GenricMapperUtility genricMapper;
 
     @Autowired
-    public UserAuthenticationService(UserRepository userRepository, UserMapper userMapper){
+    public UserAuthenticationService(UserRepository userRepository, GenricMapperUtility genricMapper){
         this.userRepository = userRepository;
-        this.userMapper = userMapper;
+        this.genricMapper = genricMapper;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class UserAuthenticationService implements UserDetailsService {
     }
 
     public void registerUser(UserDto userDto) {
-        Users user = userMapper.convertUser(userDto);
+        Users user = genricMapper.mapToEntity(userDto, Users.class);
         String encoded = new BCryptPasswordEncoder().encode(user.getPassword());
         user.setPassword(encoded);
         userRepository.save(user);
