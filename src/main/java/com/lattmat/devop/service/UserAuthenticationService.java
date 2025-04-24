@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +33,6 @@ public class UserAuthenticationService implements UserDetailsService {
         Users user = userRepository.findByNameIgnoreCase(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Invalid Credentials."));
         List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().toUpperCase()));
-
         return new User(user.getName(), user.getPassword(), authorities);
        // return new User(user.getName(), user.getPassword(), new ArrayList<>());
     }

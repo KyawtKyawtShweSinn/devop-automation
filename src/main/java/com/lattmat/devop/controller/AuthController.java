@@ -5,6 +5,7 @@ import com.lattmat.devop.service.UserAuthenticationService;
 import com.lattmat.devop.utility.JWTUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
+@Slf4j
 public class AuthController {
 
     private final JWTUtility jwtUtility;
@@ -40,9 +42,11 @@ public class AuthController {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userDto.getName(), userDto.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.info("Authentication Passed with {}", userDto.getName());
 
             UserDetails userDetails = authenticationService.loadUserByUsername(userDto.getName());
             String token = jwtUtility.generateToken(userDetails);
+            log.info("Generated token {}", token);
 
             Map<String, String> response = new HashMap<>();
             response.put("token", token);
@@ -56,28 +60,34 @@ public class AuthController {
     public ResponseEntity<String> registerUser(@RequestBody UserDto userDto) {
         try {
             authenticationService.registerUser(userDto);
+            log.info("Registered User {}", userDto.toString());
             return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully.");
         } catch (Exception e) {
+            log.info("Registered Failed {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User registration failed.");
         }
     }
 
     @PostMapping("/refresh")
     public ResponseEntity<Object> refreshToken(@RequestBody String expiredToken) {
+        Map<String, String> response = new HashMap<>();
         try {
             String username = jwtUtility.extractUsername(expiredToken);
+            log.info("Extract User Name from Token {}", username);
+
             UserDetails userDetails = authenticationService.loadUserByUsername(username);
+            log.info("Find User with Username {}", userDetails.toString());
 
             if (Boolean.TRUE.equals(jwtUtility.validateToken(expiredToken, userDetails))) {
                 String refreshedToken = jwtUtility.generateToken(userDetails);
-                Map<String, String> response = new HashMap<>();
+                log.info("Refreshed Token {}", refreshedToken);
                 response.put("token", refreshedToken);
-                return ResponseEntity.ok(response);
             }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid or expired token.");
         } catch (Exception e) {
+            log.info("Error in generating token {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token error: " + e.getMessage());
         }
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/logout")
@@ -87,6 +97,7 @@ public class AuthController {
             session.invalidate();
         }
         SecurityContextHolder.clearContext();
+        log.info("Successfully Logout");
         return ResponseEntity.ok("Logged out successfully.");
     }
 
@@ -98,8 +109,10 @@ public class AuthController {
         }
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        log.info("UserDetails {}", userDetails.toString());
         UserDto userDto = new UserDto();
         userDto.setName(userDetails.getUsername());
+        log.info("UserName {}", userDto.getName());
         // Add additional user details if needed
         return ResponseEntity.ok(userDto);
     }
